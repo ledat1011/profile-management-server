@@ -1,0 +1,6 @@
+    <modules>
+        <module>server</module>
+        <module>comm-client</module>
+        <module>profile-service</module>
+        <module>user-service</module>
+    </modules>
