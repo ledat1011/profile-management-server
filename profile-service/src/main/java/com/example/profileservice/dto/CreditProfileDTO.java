@@ -4,34 +4,25 @@ import java.math.BigDecimal;
 import java.sql.Date;
 
 public class CreditProfileDTO {
-	private Integer profileID;
 	private String fullName;
-	private Date dateOfBirth;
-	private String identityNumber;
-	private String permanentAddress;
-	private String phoneNumber;
-	private String email;
-	private BigDecimal monthlyIncome;
-	private String incomeSource;
-	private BigDecimal totalAssets;
-	private BigDecimal totalLiabilities;
-	private Integer currentCreditCardsOrLoans;
-	private String companyName;
-	private String occupation;
-	private String jobPosition;
-	private Integer jobDurationInMonths;
-	private String guarantorName;
-	private String guarantorRelationship;
-	private String guarantorPhone;
-	private String guarantorEmail;
-
-	public Integer getProfileID() {
-		return profileID;
-	}
-
-	public void setProfileID(Integer profileID) {
-		this.profileID = profileID;
-	}
+    private Date dateOfBirth;
+    private String identityNumber;
+    private String permanentAddress;
+    private String phoneNumber;
+    private String email;
+    private BigDecimal monthlyIncome;
+    private String incomeSource;
+    private BigDecimal totalAssets;
+    private BigDecimal totalLiabilities;
+    private Integer currentCreditCardsOrLoans;
+    private String companyName;
+    private String occupation;
+    private String jobPosition;
+    private Integer jobDurationInMonths;
+    private String guarantorName;
+    private String guarantorRelationship;
+    private String guarantorPhone;
+    private String guarantorEmail;
 
 	public String getFullName() {
 		return fullName;
