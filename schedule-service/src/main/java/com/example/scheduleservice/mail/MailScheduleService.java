@@ -19,6 +19,7 @@ public class MailScheduleService extends BaseService{
 	
 	@Scheduled(cron="#{@getMailCron}")
 	public void sendMailSchedule() {
+		
 		mailService.sendEmail("ledat10111999@gmail.com", "test subject", "test content");
 	}
 }

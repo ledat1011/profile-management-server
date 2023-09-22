@@ -15,9 +15,12 @@ public class EmailRoute extends RouteBuilder {
 
 	@Override
 	public void configure() throws Exception {
-		from("seda:sendEmail").log(LoggingLevel.INFO, "SENDING EMAIL NOTIFICATION").to(
-				"smtps://{{spring.mail.host}}:{{spring.mail.port}}?username={{spring.mail.username}}&password={{spring.mail.password}}&mail.smtp.auth=auth&mail.smtp.starttls.enable=starttls")
-				.log(LoggingLevel.INFO, "EMAIL NOTIFICATION SENT").stop();
+	    from("seda:sendEmail")
+	        .log(LoggingLevel.INFO, "SENDING EMAIL NOTIFICATION")
+	        .to("smtps://{{spring.mail.host}}:{{spring.mail.ssl.port}}?username={{spring.mail.username}}&password={{spring.mail.password}}&mail.smtp.auth=true&mail.smtp.starttls.enable=true")
+	        .log(LoggingLevel.INFO, "EMAIL NOTIFICATION SENT")
+	        .stop();
 	}
+
 
 }
