@@ -20,7 +20,7 @@ public class ScheduleConfiguration {
 	private String mailType;
 
 	@Bean
-	public String getMailCron() {
+	public String getMailScheduleCron() {
 		return systemParamRepository
 				.findByParamKeyAndParamGroup(StringUtils.PARAM_KEY_SCHEDULE, StringUtils.PARAM_GROUP_SERVER)
 				.getParamValue();

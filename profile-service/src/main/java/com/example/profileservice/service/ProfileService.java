@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.dataservice.entity.CreditProfileEntity;
 import com.example.dataservice.repository.CreditProfileRepository;
@@ -26,17 +27,14 @@ public class ProfileService {
 		return creditProfileRepository.findById(id).orElse(null);
 	}
 
-	public Boolean deleteById(Integer id) {
+	@Transactional
+	public Boolean deleteById(List<Integer> ids) {
 		try {
-			if (creditProfileRepository.existsById(id)) {
-				creditProfileRepository.deleteById(id);
-				logger.info("Deleting credit profile with ID: {}", id);
-				return true;
-			} else {
-				logger.warn("credit profile with ID: {} not found", id);
-			}
+			creditProfileRepository.deleteAllById(ids);
+			logger.info("Deleting credit profile with ID(s): {}", ids);
+			return true;
 		} catch (Exception e) {
-
+			logger.error("Error deleting credit profiles with ID(s): {}. Reason: {}", ids, e.getMessage());
 		}
 		return false;
 	}

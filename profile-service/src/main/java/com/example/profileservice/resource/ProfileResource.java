@@ -30,9 +30,9 @@ public class ProfileResource {
 		return profileService.getById(id);
 	}
 
-	@RequestMapping("/delete")
-	public ResponseEntity<Boolean> deleteById(@RequestParam(name = "id") Integer id) {
-		return ResponseEntity.ok(profileService.deleteById(id));
+	@PostMapping("/delete")
+	public ResponseEntity<Boolean> deleteById(@RequestBody List<Integer> ids) {
+		return ResponseEntity.ok(profileService.deleteById(ids));
 	}
 
 	@PostMapping("/create")
