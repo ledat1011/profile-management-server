@@ -1,5 +1,6 @@
 version: '3'
 services:
+  ### eureka server
   server:
     build:
       context: ./server
@@ -15,7 +16,6 @@ services:
     image: example/comm-client:latest
     ports:
       - "8081:8081"
-
   profile-service:
     build:
       context: ./profile-service
@@ -23,4 +23,14 @@ services:
     image: example/profile-service:latest
     ports:
       - "8082:8082"
+  ### MySQL Container
+  mysql:
+    build:
+      context: ./mysql
+      args:
+        - MYSQL_ROOT_PASSWORD=1234
+        - MYSQL_DATABASE=profile_management
+    image: example/mysql
+    ports:
+      - "3307:3306"
 
