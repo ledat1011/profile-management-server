@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.dataservice.entity.CreditProfileEntity;
 
-@FeignClient(name = "profile-service")
+@FeignClient(name = "profile-service-client")
 public interface CreditProfileService {
 	@GetMapping("/profile/get-all")
 	public List<CreditProfileEntity> getAll();
