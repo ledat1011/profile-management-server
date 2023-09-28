@@ -36,7 +36,8 @@ public class MailScheduleService extends BaseService {
 		List<CreditProfileEntity> listNearDL = this.listProfileNearDealine(listProfile);
 		List<CreditProfileEntity> listDL = creditProfileRepository.findAllPastPaymentDeadline(currentDate);
 		// send notification to list near deadline
-		if (listNearDL != null && !listNearDL.isEmpty()) {
+		boolean isNearDLNotEmpty = listNearDL != null && !listNearDL.isEmpty();
+		if (isNearDLNotEmpty) {
 			listNearDL.parallelStream().forEach(v -> {
 				Integer remainDay = getTimeRemain(today,
 						v.getPaymentDeadline().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
@@ -45,13 +46,18 @@ public class MailScheduleService extends BaseService {
 			});
 		}
 		// send notification to list deadline
-		if (listDL != null && !listDL.isEmpty()) {
+		boolean isDLNotEmpty = listDL != null && !listDL.isEmpty();
+		if (isDLNotEmpty) {
 			listDL.parallelStream().forEach(v -> {
 				Integer remainDay = getTimeRemain(
 						v.getPaymentDeadline().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), today);
 				mailService.sendEmail(v.getEmail(), "[Profile management] Payment is past due",
 						remainDay + " day(s) left to pay the amount of" + v.getTotalAssets());
 			});
+		}
+		
+		if(isDLNotEmpty && isNearDLNotEmpty) {
+			logger.info("There are no account expire");
 		}
 	}
 

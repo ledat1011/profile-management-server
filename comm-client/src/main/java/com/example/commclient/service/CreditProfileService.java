@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.commclient.common.BaseEurekaClientService;
 import com.example.dataservice.entity.CreditProfileEntity;
 
 @FeignClient(name = "profile-service-client")
-public interface CreditProfileService {
+public interface CreditProfileService extends BaseEurekaClientService{
 	@GetMapping("/profile/get-all")
 	public List<CreditProfileEntity> getAll();
 

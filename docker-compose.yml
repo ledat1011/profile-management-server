@@ -8,7 +8,7 @@ services:
     image: example/server:latest
     ports:
       - "8761:8761"
-
+ ### common client
   comm-client:
     build:
       context: ./comm-client
@@ -16,6 +16,7 @@ services:
     image: example/comm-client:latest
     ports:
       - "8081:8081"
+  ### profile service
   profile-service:
     build:
       context: ./profile-service
@@ -23,6 +24,14 @@ services:
     image: example/profile-service:latest
     ports:
       - "8082:8082"
+  ### schedule service
+  schedule-service:
+    build:
+      context: ./schedule-service
+      dockerfile: Dockerfile
+    image: example/schedule-service:latest
+    ports:
+      - "8084:8084"
   ### MySQL Container
   mysql:
     build:

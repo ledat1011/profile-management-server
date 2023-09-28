@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dataservice.entity.CreditProfileEntity;
+import com.example.profileservice.common.BaseResource;
 import com.example.profileservice.dto.CreditProfileDTO;
 import com.example.profileservice.service.ProfileService;
 
 @RestController
 @RequestMapping("/profile")
-public class ProfileResource {
+public class ProfileResource extends BaseResource{
 	@Autowired
 	ProfileService profileService;
 

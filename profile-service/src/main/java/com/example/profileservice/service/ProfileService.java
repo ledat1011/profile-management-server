@@ -10,10 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.dataservice.entity.CreditProfileEntity;
 import com.example.dataservice.repository.CreditProfileRepository;
+import com.example.profileservice.common.BaseService;
 import com.example.profileservice.dto.CreditProfileDTO;
 
 @Service
-public class ProfileService {
+public class ProfileService extends BaseService{
 
 	private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
 	@Autowired
