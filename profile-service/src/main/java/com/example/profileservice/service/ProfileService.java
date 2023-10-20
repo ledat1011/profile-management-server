@@ -2,6 +2,15 @@ package com.example.profileservice.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +21,7 @@ import com.example.dataservice.entity.CreditProfileEntity;
 import com.example.dataservice.repository.CreditProfileRepository;
 import com.example.profileservice.common.BaseService;
 import com.example.profileservice.dto.CreditProfileDTO;
+import com.example.profileservice.filter.FilterDto;
 
 @Service
 public class ProfileService extends BaseService{
@@ -19,6 +29,12 @@ public class ProfileService extends BaseService{
 	private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
 	@Autowired
 	CreditProfileRepository creditProfileRepository;
+	
+	@Autowired
+	FilterService filterService;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	public List<CreditProfileEntity> getAll() {
 		return creditProfileRepository.findAll();
@@ -63,5 +79,20 @@ public class ProfileService extends BaseService{
 		entity.setGuarantorEmail(dto.getGuarantorEmail());
 
 		return creditProfileRepository.save(entity);
+	}
+	
+	public List<CreditProfileEntity> creditSerch(FilterDto filterDto) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<CreditProfileEntity> criteriaQuery = criteriaBuilder.createQuery(CreditProfileEntity.class);
+		Root<CreditProfileEntity> root = criteriaQuery.from(CreditProfileEntity.class);
+		 
+		Predicate predicate = filterService.buildPredicate(criteriaBuilder, root, filterDto.getCriteriaFilter());
+		
+		Order order = filterService.buildOrder(criteriaBuilder, root, filterDto.getSortItem());
+		
+        criteriaQuery.where(predicate);
+        criteriaQuery.orderBy(order);
+        TypedQuery<CreditProfileEntity> query = entityManager.createQuery(criteriaQuery);
+        return query.getResultList();
 	}
 }
