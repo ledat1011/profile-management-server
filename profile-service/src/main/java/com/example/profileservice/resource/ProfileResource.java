@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.dataservice.entity.CreditProfileEntity;
 import com.example.profileservice.common.BaseResource;
 import com.example.profileservice.dto.CreditProfileDTO;
+import com.example.profileservice.dto.ProfileResponse;
 import com.example.profileservice.filter.FilterDto;
 import com.example.profileservice.service.ProfileService;
 
@@ -44,8 +45,8 @@ public class ProfileResource extends BaseResource{
 	}
 	
 	@PostMapping("/v2/get")
-	public ResponseEntity<List<CreditProfileEntity>> getProfile(@RequestBody FilterDto filterDto) {
-		List<CreditProfileEntity> listProfile = profileService.creditSerch(filterDto);
+	public ResponseEntity<ProfileResponse> getProfile(@RequestBody FilterDto filterDto) {
+		ProfileResponse listProfile = profileService.creditSearch(filterDto);
 		return ResponseEntity.ok(listProfile);
 	}
 	

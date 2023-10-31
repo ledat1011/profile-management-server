@@ -1,4 +1,4 @@
-package com.example.profileservice.filter;
+package com.example.profileservice.enums;
 
 public enum SortTypeEnum {
 

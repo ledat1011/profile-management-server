@@ -1,6 +1,7 @@
-package com.example.profileservice.filter;
+package com.example.profileservice.enums;
 
 public enum FilterTypeEnum {
+	
 	TEXT_FILTER("filterTextValue"), 
 	BOOLEN_FILTER("filterBooleanValue"), 
 	DATE_FILTER("filterDateValue");

@@ -14,6 +14,10 @@ import javax.persistence.criteria.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,18 +25,20 @@ import com.example.dataservice.entity.CreditProfileEntity;
 import com.example.dataservice.repository.CreditProfileRepository;
 import com.example.profileservice.common.BaseService;
 import com.example.profileservice.dto.CreditProfileDTO;
+import com.example.profileservice.dto.ProfileResponse;
 import com.example.profileservice.filter.FilterDto;
 
 @Service
-public class ProfileService extends BaseService{
+public class ProfileService extends BaseService {
 
-	private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(ProfileService.class);
 	@Autowired
 	CreditProfileRepository creditProfileRepository;
-	
+
 	@Autowired
 	FilterService filterService;
-	
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -51,7 +57,9 @@ public class ProfileService extends BaseService{
 			logger.info("Deleting credit profile with ID(s): {}", ids);
 			return true;
 		} catch (Exception e) {
-			logger.error("Error deleting credit profiles with ID(s): {}. Reason: {}", ids, e.getMessage());
+			logger.error(
+					"Error deleting credit profiles with ID(s): {}. Reason: {}",
+					ids, e.getMessage());
 		}
 		return false;
 	}
@@ -80,19 +88,54 @@ public class ProfileService extends BaseService{
 
 		return creditProfileRepository.save(entity);
 	}
+
+//	public ProfileResponse creditSerch(FilterDto filterDto) {
+//		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+//		CriteriaQuery<CreditProfileEntity> criteriaQuery = criteriaBuilder
+//				.createQuery(CreditProfileEntity.class);
+//		Root<CreditProfileEntity> root = criteriaQuery
+//				.from(CreditProfileEntity.class);
+//
+//		Predicate predicate = filterService.buildPredicate(criteriaBuilder,
+//				root, filterDto.getCriteriaFilter());
+//
+//		Order order = filterService.buildOrder(criteriaBuilder, root,
+//				filterDto.getSortItem());
+//
+//		criteriaQuery.where(predicate);
+//		criteriaQuery.orderBy(order);
+//
+//		TypedQuery<CreditProfileEntity> query = entityManager
+//				.createQuery(criteriaQuery)
+//				.setFirstResult(filterDto.getOffset()  * filterDto.getLimit())
+//				.setMaxResults(filterDto.getLimit())
+//				;
+//		long total = entityManager.createQuery(criteriaQuery).getResultList()
+//				.size();
+//		
+//		ProfileResponse res = new ProfileResponse();
+//
+//		res.setTotal(total);
+//		res.setCreditProfiles(query.getResultList());
+//
+//		return res;
+//	}
 	
-	public List<CreditProfileEntity> creditSerch(FilterDto filterDto) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<CreditProfileEntity> criteriaQuery = criteriaBuilder.createQuery(CreditProfileEntity.class);
-		Root<CreditProfileEntity> root = criteriaQuery.from(CreditProfileEntity.class);
-		 
-		Predicate predicate = filterService.buildPredicate(criteriaBuilder, root, filterDto.getCriteriaFilter());
+	
+	public ProfileResponse creditSearch(FilterDto filterDto) {
+	    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+	    CriteriaQuery<CreditProfileEntity> criteriaQuery = criteriaBuilder.createQuery(CreditProfileEntity.class);
+	    Root<CreditProfileEntity> root = criteriaQuery.from(CreditProfileEntity.class);
+
+	    List<Predicate> predicates = filterService.buildPredicate(criteriaBuilder, root, filterDto.getCriteriaFilter());
+	    Order order = filterService.buildOrder(criteriaBuilder, root, filterDto.getSortItem());
+	    
+	    
+	    Pageable paging = PageRequest.of(filterDto.getOffset(), filterDto.getLimit());
+	    
+	    PageImpl<CreditProfileEntity> credit = filterService.select(entityManager, criteriaQuery, criteriaBuilder, order, predicates, paging);
+	    ProfileResponse res = new ProfileResponse(credit);
 		
-		Order order = filterService.buildOrder(criteriaBuilder, root, filterDto.getSortItem());
-		
-        criteriaQuery.where(predicate);
-        criteriaQuery.orderBy(order);
-        TypedQuery<CreditProfileEntity> query = entityManager.createQuery(criteriaQuery);
-        return query.getResultList();
+	    return res;
 	}
 }
